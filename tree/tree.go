@@ -52,12 +52,12 @@ func (this *Tree) BreadthTravel() {
 		return
 	}
 
-	queue := []*TreeNode{}
-	queue = append(queue, this.RootNode)
+	queue := []*TreeNode{this.RootNode}
+	//queue = append(queue, this.RootNode)
 	for len(queue) != 0 {
 		c_node := queue[0]
-		queue := queue[1:]
-		fmt.Sprintf("current node data is: %v\n", c_node.Data)
+		queue = queue[1:]
+		fmt.Printf("current node data is: %v\n", c_node.Data)
 
 		if c_node.LeftChild != nil {
 			queue = append(queue, c_node.LeftChild)
