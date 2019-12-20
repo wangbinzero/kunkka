@@ -3,3 +3,6 @@
 
 # kunkka  
 昆卡
+
+- Tree  [二叉树]
+- LinkedList [双向链表]
