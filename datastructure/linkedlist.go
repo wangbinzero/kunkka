@@ -77,5 +77,64 @@ func (this *LinkedList) Add(node *LinkedNode) bool {
 
 //向指定位置插入节点
 func (this *LinkedList) Insert(index uint, node *LinkedNode) bool {
+	if index > this.Size || node == nil {
+		return false
+	}
 
+	//如果插入索引等于当前链表长度则直接添加
+	if index == this.Size {
+		return this.Add(node)
+	}
+
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+	if index == 0 {
+		node.Next = this.Head
+		this.Head = node
+		this.Head.Prev = nil
+		this.Size++
+		return true
+	}
+
+	nextNode := this.Get(index)
+	node.Prev = nextNode.Prev
+	node.Next = nextNode
+	nextNode.Prev.Next = node
+	nextNode.Prev = node
+	this.Size++
+	return true
+}
+
+//删除节点
+func (this *LinkedList) Del(index uint) bool {
+	if index > this.Size-1 {
+		return false
+	}
+
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+	if index == 0 {
+		if this.Size == 1 {
+			this.Head = nil
+			this.Tail = nil
+		} else {
+			this.Head.Next.Prev = nil
+			this.Head = this.Head.Next
+		}
+		this.Size--
+		return true
+	}
+
+	if index == this.Size-1 {
+		this.Tail.Prev.Next = nil
+		this.Tail = this.Tail.Prev
+		this.Size--
+		return true
+	}
+
+	node := this.Get(index)
+	node.Prev.Next = node.Next
+	node.Next.Prev = node.Prev
+	this.Size--
+	return true
 }
